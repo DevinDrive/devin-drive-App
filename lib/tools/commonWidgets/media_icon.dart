@@ -1,10 +1,16 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+import 'dart:developer';
 import 'dart:ui';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:unicons/unicons.dart';
 import '../../const.dart';
+import 'package:http/http.dart' as http;
 
 class MediaIcon extends StatefulWidget {
   const MediaIcon({super.key, required this.folderName, required this.thumbnailUrl, required this.folderId, required this.deleteFun});
@@ -27,14 +33,22 @@ class _MediaIconState extends State<MediaIcon> {
       isDownloading = true;
     });
     savedFilePath = await createLocalDir(fileName);
-    await dio.download(
+    Response res= await dio.get(
         getAFile,
         data: {'token': token, "fileId": fileId, "fileName": fileName},
-        savedFilePath, onReceiveProgress: (download, totalSize) {
+        options: Options(
+          responseType: ResponseType.stream,
+
+        ),
+        onReceiveProgress: (download, totalSize) {
       setState(() {
+
         progress = download / totalSize;
       });
     });
+    print(res.data["data"]);
+    List<int> bufferData = res.data["data"].cast<int>();
+    await File(savedFilePath).writeAsBytes(bufferData);
     setState(() {
       isDownloading = false;
     });

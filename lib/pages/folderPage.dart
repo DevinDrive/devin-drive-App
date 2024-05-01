@@ -19,11 +19,14 @@ class _FolderPageState extends State<FolderPage> {
   late List filesAndFolders =[];
   bool isFileLoaded= false;
   final Dio dio = Dio();
+  int parentFolderId=-2;
 
   Future<void> getAllFilesAndFolders() async {
-    List filesAndFoldersList = await getAllFilesFromCollection(widget.folderId);
+
+    Map<String, dynamic> filesAndFoldersList = await getAllFilesFromCollection(widget.folderId);
     setState(() {
-      filesAndFolders = filesAndFoldersList;
+      parentFolderId = filesAndFoldersList["id"];
+      filesAndFolders = filesAndFoldersList["files"];
       isFileLoaded =true;
     });
   }
@@ -44,8 +47,6 @@ class _FolderPageState extends State<FolderPage> {
           });
         });
   }
-
-
 
   @override
   void initState() {
@@ -104,6 +105,7 @@ class _FolderPageState extends State<FolderPage> {
                 : FolderIcon(
               folderName: filesAndFolders[i]["name"],
               folderId: filesAndFolders[i]["id"],
+              onTap: () { deleteFolder( filesAndFolders[i]["id"], parentFolderId.toString()).then((value) => getAllFilesAndFolders()); },
               );
           }
       )

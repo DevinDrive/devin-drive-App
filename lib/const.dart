@@ -8,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:tele_drive_app/tools/commonWidgets/buttons.dart';
 import 'package:tele_drive_app/tools/commonWidgets/text_field.dart';
 
-String ip = "192.168.29.176";
+String ip = "172.23.16.176";
 String apiUrl = "http://$ip:3000/v1";
 String token = '';
 // String apiUrl = "https://telebackend.onrender.com/v1";
@@ -111,7 +111,7 @@ Future<bool> requestPermission() async {
   }
 }
 
-Future<List<dynamic>> getAllFilesFromCollection(String docId) async {
+Future<Map<String, dynamic>> getAllFilesFromCollection(String docId) async {
   var res = await dio.get(
       getCollectionFiles,
       data:{
@@ -145,11 +145,12 @@ Future<void> deleteFile(String telegramId, String docId, String parentId) async 
   );
 }
 
-Future<void> deleteFolder(String folderId) async {
+Future<void> deleteFolder(String folderId, String parentFolderId) async {
   var res = await dio.get(
       deleteFolderUrl,
       data: {
         "token": token,
+        "parentFolderId" :parentFolderId,
         "folderId": folderId,
       }
   );

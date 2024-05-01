@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:tele_drive_app/const.dart';
 import 'package:tele_drive_app/pages/folderPage.dart';
 import 'package:unicons/unicons.dart';
 class FolderIcon extends StatelessWidget {
-  const FolderIcon({super.key,required this.folderName, required this.folderId});
+  const FolderIcon({super.key,required this.folderName, required this.folderId, required this.onTap,});
   final String folderName;
   final String folderId;
+  // final String parentFolderId;
+  final Function() onTap;
+
   @override
   Widget build(BuildContext context) {
 
@@ -38,7 +40,8 @@ class FolderIcon extends StatelessWidget {
               backgroundColor: menuColor,
               title: const Text("Delete"),
               trailingIcon: const Icon(UniconsLine.trash_alt),
-              onPressed: () { deleteFolder(folderId);}),
+              // onPressed: () { deleteFolder(folderId,parentFolderId).then((value) => onTap);}),
+              onPressed: onTap),
           FocusedMenuItem(
               backgroundColor: menuColor,
               title: const Text("Rename"),

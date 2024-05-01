@@ -22,12 +22,14 @@ class _MyHomeState extends State<MyHome> {
   final Dio dio = Dio();
   bool isFileLoaded = false;
   late List filesAndFolders = [];
+  String parentFolderId="";
   double progress =0;
 
   Future<void> getAllFilesAndFolders() async {
-    List filesAndFoldersList = await getAllFilesFromCollection(token);
+    Map<String, dynamic> filesAndFoldersList = await getAllFilesFromCollection(token);
     setState(() {
-      filesAndFolders = filesAndFoldersList;
+      parentFolderId = filesAndFoldersList["id"].toString();
+      filesAndFolders = filesAndFoldersList["files"];
       isFileLoaded =true;
     });
   }
@@ -130,6 +132,7 @@ class _MyHomeState extends State<MyHome> {
                                           : FolderIcon(
                                               folderName: filesAndFolders[i]["name"],
                                               folderId: filesAndFolders[i]["id"],
+                                        onTap: () { deleteFolder(filesAndFolders[i]["id"], token).then((value) => getAllFilesAndFolders()); },
                                             );
                                     })
                         )

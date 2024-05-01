@@ -11,7 +11,7 @@ import 'package:tele_drive_app/pages/sign_up_page.dart';
 import 'package:tele_drive_app/tools/States/nav_notifier.dart';
 import 'package:tele_drive_app/tools/navigationbar.dart';
 import 'Themes/theme.dart';
-
+import 'package:http/http.dart' as http;
 void main() {
   runApp(
       ProviderScope(child: MyApp())
@@ -28,7 +28,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool isLogin=false;
 
-  final Dio dio = Dio();
+  // final Dio dio = Dio();
 
   Future<void> checkIfLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
     // String? mySessionId = prefs.getString("sessionId");
     // print(mySessionId);
     print(myToken);
-    var res = await dio.get(
+    var res = await dio.post(
         checkLogin,
         data: {
           "token": myToken
